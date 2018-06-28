@@ -3,6 +3,7 @@ import java.security.SecureRandom;
 
 public class Jugada {
     private int[] posiciones;
+    private boolean fin = false;
 
     public Jugada() {
         super();
@@ -22,14 +23,22 @@ public class Jugada {
         this.posiciones = posiciones;
     }
 
-    public int[]getPosiciones(){
+    public void setFin(boolean dato) {
+        this.fin = dato;
+    }
+
+    public boolean getFin() {
+        return this.fin;
+    }
+
+    public int[] getPosiciones(){
         return this.posiciones;
     }
 
     public String toString() {
         String salida = "";
         for (int i=0;i<this.posiciones.length;i++) {
-            salida +=posiciones[i]+"  ";
+            salida +=posiciones[i]+"\t";
         }
         return salida;
     }
@@ -51,5 +60,38 @@ public class Jugada {
             base[n] = base[k-1];//coloco el número que hay al final del array en la posición que acabo de usar
             k--;//el contador también lo reduzco en uno para que no coja la última posición, que puede ser repetida.
         }
+    }
+
+    public String compararJugada(int[] intento) {
+        String salida = "";
+        boolean controlPlus = true;
+        for (int i = 0; i<this.posiciones.length; i++) {
+            if(intento[i] == this.posiciones[i]) {
+                salida += "·\t";
+            } else {
+                controlPlus = false;
+                boolean control = false;
+                for(int j = 0; j<this.posiciones.length; j++) {
+                    if (intento[i] == this.posiciones[j] && j!=i) {
+                        control = true;
+                    }
+                }
+                if(control) {
+                    salida += "Q\t";
+                } else {
+                    salida += "X\t";
+                }
+            }
+        }
+        if(controlPlus) {
+            return findelJuego(salida);
+        } else {
+            return salida;
+        }
+    }
+
+    private String findelJuego(String resultado) {
+        this.fin = true;
+        return resultado+"\n¡¡Enhorabuena, has sido capaz de encontrar la fórmula secreta!!";
     }
 }
